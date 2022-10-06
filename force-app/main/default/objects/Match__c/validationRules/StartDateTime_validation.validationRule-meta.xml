@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>StartDateTime_validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>StartDateTime__c &lt;  NOW()</errorConditionFormula>
+    <errorMessage>Match StartDateTime cannot be in past for new Matches!</errorMessage>
+</ValidationRule>
