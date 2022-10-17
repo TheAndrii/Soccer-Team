@@ -1,17 +1,16 @@
 public class SoccerDAO {
 
     public static List<Team__c> getTeamsByIds(Set<Id> teamIds){
-        List<Team__c> teamsList = [SELECT Name FROM Team__c WHERE Id in:teamIds];
-        return teamsList;
+        return [SELECT Name FROM Team__c WHERE Id in:teamIds];
     }
 
     public static List<Player__c> getActivePlayers(Integer limitNumber, Integer offsetNumber){
-        List<Player__c> activePlayersList = [
+        return [
             SELECT Name, IsActive__c 
             FROM Player__c 
             WHERE IsActive__c = true 
-            ORDER BY Name ASC LIMIT :limitNumber OFFSET :offsetNumber];
-        return activePlayersList;
+            ORDER BY Name ASC LIMIT :limitNumber OFFSET :offsetNumber
+        ];
     }
 
     public static Team__c getMostWinnerTeam(){
@@ -26,25 +25,22 @@ public class SoccerDAO {
     public static Map<Id, Integer> getTeamsWithPlayerNumber (Set<Id> teamIds){
         Map<Id, Integer> numberOfPlayers = new Map<Id, Integer>();
         Set<Id> nullTeamIds = new Set<Id>{null};
+        List<AggregateResult> numberOfPlayersList;
         if (teamIds == nullTeamIds){
-            List<AggregateResult> numberOfPlayersList = Database.query('SELECT COUNT(Id) numberOfPlayers, Team__c '
+            numberOfPlayersList = Database.query('SELECT COUNT(Id) numberOfPlayers, Team__c '
                 + 'FROM Player__c ' + 'WHERE Team__c != null ' + 'GROUP By Team__c');
-          	for (AggregateResult a : numberOfPlayersList){
-            	String teamId =(String)a.get('Team__c');
-            	Integer intdata =(Integer)a.get('numberOfPlayers');
-            	numberOfPlayers.put(teamId, intdata);
-        	}
         } else {
-            List<AggregateResult> numberOfPlayersList = [
+            numberOfPlayersList = [
                 SELECT COUNT(Id) numberOfPlayers, Team__c 
                 FROM Player__c 
                 WHERE Team__c IN : teamIds GROUP By Team__c
             ];
-            for (AggregateResult a : numberOfPlayersList){
-            	String teamId =(String)a.get('Team__c');
-            	Integer intdata =(Integer)a.get('numberOfPlayers');
-            	numberOfPlayers.put(teamId, intdata);
-        	}
+        }
+
+        for (AggregateResult a : numberOfPlayersList){
+            String teamId =(String)a.get('Team__c');
+            Integer intdata =(Integer)a.get('numberOfPlayers');
+            numberOfPlayers.put(teamId, intdata);
         }
         
         return numberOfPlayers;
@@ -53,26 +49,25 @@ public class SoccerDAO {
     public static Integer getTeamStatistics(Set<Id> teamIds){
         Set<Id> nullTeamIds = new Set<Id>{null};
         Integer intVersion;
+        AggregateResult[] avgNumberOfPlayersList;
         if (teamIds == nullTeamIds){
-            AggregateResult[] avgNumberOfPlayersList = [
+            avgNumberOfPlayersList = [
                 SELECT AVG(TotalActivePlayers__c) avgNumberOfPlayers 
                 FROM Team__c 
             ];
-            for (AggregateResult a : avgNumberOfPlayersList){
-            	Decimal avgdata =(Decimal) a.get('avgNumberOfPlayers');
-            	intVersion = Integer.valueOf(avgdata);
-        	}
         } else {
-            AggregateResult[] avgNumberOfPlayersList = [
+            avgNumberOfPlayersList = [
                 SELECT AVG(TotalActivePlayers__c) avgNumberOfPlayers 
                 FROM Team__c 
                 WHERE Id IN : teamIds
             ];
-            for (AggregateResult a : avgNumberOfPlayersList){
-            	Decimal avgdata =(Decimal) a.get('avgNumberOfPlayers');
-            	intVersion = Integer.valueOf(avgdata);
-        	}
         }
+
+        for (AggregateResult a : avgNumberOfPlayersList){
+            Decimal avgdata =(Decimal) a.get('avgNumberOfPlayers');
+            intVersion = Integer.valueOf(avgdata);
+        }
+
         return intVersion;
     }
 
@@ -85,11 +80,10 @@ public class SoccerDAO {
         String winerTeam;
         Integer homeTeamScore = 0;
         Integer visitorTeamScore = 0;
-    	Integer initialScore = 0;
     
     	List<Team__c> allTeamsList = [SELECT Id, Name FROM Team__c];
     	for(Team__c a : allTeamsList){
-        	teamsScore.put(a.Id, initialScore);
+        	teamsScore.put(a.Id, 0);
     	}
 
 		String winerTeamId;
@@ -110,20 +104,16 @@ public class SoccerDAO {
             if (winerTeam == homeTeam){
                 Integer value = teamsScore.get(winerTeam);
                 homeTeamScore = value + 2;
-                teamsScore.remove(winerTeam);
                 teamsScore.put(winerTeam, homeTeamScore);
             } else if (winerTeam == visitorTeam){
                 Integer value = teamsScore.get(winerTeam);
                 visitorTeamScore = value + 2;
-                teamsScore.remove(winerTeam);
                 teamsScore.put(winerTeam, visitorTeamScore);
             } else {
                 Integer valueHome = teamsScore.get(homeTeam);
                 Integer valueVisitors = teamsScore.get(visitorTeam);
                 homeTeamScore = valueHome + 1;
                 visitorTeamScore = valueVisitors + 1;
-                teamsScore.remove(homeTeam);
-                teamsScore.remove(visitorTeam);
                 teamsScore.put(homeTeam, homeTeamScore);
                 teamsScore.put(visitorTeam, visitorTeamScore);
             } 
