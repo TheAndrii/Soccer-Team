@@ -1,10 +1,8 @@
-//onAfterUpdate trigger
-
 List<Match__c> newMatchesList = [
     SELECT Winner__c, HomeTeam__c, Visitors__c 
     FROM Match__c 
     ORDER BY Winner__c];
-System.debug(newMatchesList);
+//System.debug(newMatchesList);
 
 Map<Id, List<Id>> teamsMap = new Map<Id, List<Id>>();
 
@@ -45,7 +43,7 @@ Set<Id> teamIdsSet = new Set<Id>();
             teamIdsSet.add(match.Visitors__c);
         }
 
-System.debug(teamIdsSet);
+//System.debug(teamIdsSet);
 
         List<Match__c> relatedMatchesToUpdate = [
             SELECT Id, Name, StartDatetime__c, Visitors__c, HomeTeam__c  
@@ -53,7 +51,7 @@ System.debug(teamIdsSet);
             WHERE Visitors__c IN: teamIdsSet OR HomeTeam__c IN:teamIdsSet
         ];
 
-System.debug(relatedMatchesToUpdate);
+//System.debug(relatedMatchesToUpdate);
 
         List<Team__c> relatedTeamsList = [
             SELECT Name  
@@ -89,4 +87,10 @@ System.debug(relatedMatchesToUpdate);
         }
         
 
-System.debug(teamsMemmberToMatches); 
+//System.debug(teamsMemmberToMatches); 
+
+Team__c newFirstTeam = new Team__c(Name = 'FirstTeam');
+Team__c newSecondTeam = new Team__c(Name = 'SecondTeam');
+
+List<Team__c> testTeamsList = new List<Team__c>{newFirstTeam, newSecondTeam};
+System.debug(testTeamsList[0].Name); 
