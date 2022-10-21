@@ -30,7 +30,9 @@ private class SoccerServicesTest {
         Object isActiveStatus = true;
         extraValues.put(statusField, isActiveStatus);
 
+        Test.startTest();
         SoccerService.createPlayer(name, email, extraValues);
+        Test.stopTest();
 
         Player__c createdPlayer = [
             SELECT Name, Email__c
@@ -38,8 +40,9 @@ private class SoccerServicesTest {
             WHERE Name = 'Player3' AND Email__c = 'player3@email.com'
         ];
 
-        System.assert(
-            createdPlayer.Email__c == 'player3@email.com', 
+        System.assertEquals(
+            'player3@email.com',
+            createdPlayer.Email__c, 
             'SoccerServices.createPlayer is working incorrectly'
         );
     }
@@ -57,7 +60,9 @@ private class SoccerServicesTest {
         Id visitorsTeamId = teamsList.get(1).Id;
         DateTime mathcDT = DateTime.valueOf('2022-11-30 17:00:00');
 
+        Test.startTest();
         SoccerService.arangeMatch(mathcDT, homeTeamId, visitorsTeamId);
+        Test.stopTest();
 
         Match__c createdMatch = [
             SELECT Name, StartDateTime__c, HomeTeam__c, Visitors__c 
@@ -87,7 +92,9 @@ private class SoccerServicesTest {
 
         List<SoccerService.ScoreHelper> scoresList = SoccerService.getList(matchId, homeTeamScore, visitorsTeamScore);
 
+        Test.startTest();
         SoccerService.setScoreToMatches(scoresList);
+        Test.stopTest();
 
         Match__c updatedMatch = [
             SELECT Id, Name, StartDateTime__c, HomeTeam__c, Visitors__c, Score__c 
@@ -95,8 +102,9 @@ private class SoccerServicesTest {
             WHERE Id =: matchId  
         ];
 
-        System.assert(
-            updatedMatch.Score__c == '2:1', 
+        System.assertEquals(
+            '2:1',
+            updatedMatch.Score__c, 
             'SoccerServices.setScoreToMatches is working incorrectly'
         );
     }
@@ -114,7 +122,9 @@ private class SoccerServicesTest {
         Id player1Id = playersToDeactivate.get(0).Id;
         Id player2Id = playersToDeactivate.get(1).Id;
 
+        Test.startTest();
         SoccerService.deactivatePlayers(new List<Id>{player1Id, player2Id});
+        Test.stopTest();
 
         List<Player__c> deactivatedPlayers = [
             SELECT Id, isActive__c

@@ -43,14 +43,18 @@ private class SoccerDAOTest {
         Id team1Id = teamsList.get(0).Id;
         Id team2Id = teamsList.get(1).Id;
 
+        Test.startTest();
         List<Team__c> resultingList = SoccerDAO.getTeamsByIds(new Set<Id>{team1Id, team2Id});
+        Test.stopTest();
         
-        System.assert(
-            resultingList.get(0).Id == team1Id, 
+        System.assertEquals(
+            team1Id,
+            resultingList.get(0).Id, 
             'SoccerDAO.getTeamsByIds is working incorrectly'
         );
-        System.assert(
-            resultingList.get(1).Id == team2Id, 
+        System.assertEquals(
+            team2Id,
+            resultingList.get(1).Id, 
             'SoccerDAO.getTeamsByIds is working incorrectly'
         );
     }
@@ -71,14 +75,18 @@ private class SoccerDAOTest {
         Id player1Id = playersList.get(0).Id;
         Id player2Id = playersList.get(1).Id;
 
+        Test.startTest();
         List<Player__c> resultingList = SoccerDAO.getActivePlayers(limitNumber, offsetNumber);
+        Test.stopTest();
 
-        System.assert(
-            resultingList.get(0).Id == player1Id, 
+        System.assertEquals(
+            player1Id,
+            resultingList.get(0).Id, 
             'SoccerDAO.getActivePlayers is working incorrectly'
         );
-        System.assert(
-            resultingList.get(1).Id == player2Id, 
+        System.assertEquals(
+            player2Id,
+            resultingList.get(1).Id, 
             'SoccerDAO.getActivePlayers is working incorrectly'
         );
     }
@@ -88,10 +96,14 @@ private class SoccerDAOTest {
 
         Team__c mostWinnerTeam = [SELECT Id, Name FROM Team__c ORDER BY TotalWins__c DESC LIMIT 1];
         Id mostWinnerTeamId = mostWinnerTeam.Id;
-        Team__c result = SoccerDAO.getMostWinnerTeam();
 
-        System.assert(
-            result.Id == mostWinnerTeamId, 
+        Test.startTest();
+        Team__c result = SoccerDAO.getMostWinnerTeam();
+        Test.stopTest();
+
+        System.assertEquals(
+            mostWinnerTeamId,
+            result.Id, 
             'SoccerDAO.getMostWinnerTeam is working incorrectly'
         );
     }
@@ -108,10 +120,13 @@ private class SoccerDAOTest {
 
         Id teamId = team.Id;
 
+        Test.startTest();
         Integer wonMatchesOfTeam = SoccerDAO.getWonMatchesCountByTeamId(teamId);
+        Test.stopTest();
 
-        System.assert(
-            wonMatchesOfTeam == team.TotalWins__c.intValue(), 
+        System.assertEquals(
+            team.TotalWins__c.intValue(),
+            wonMatchesOfTeam, 
             'SoccerDAO.getWonMatchesCountByTeamId is working incorrectly'
         );
     }
@@ -127,8 +142,10 @@ private class SoccerDAOTest {
 
         Id team1Id = teamsList.get(0).Id;
         Id team2Id = teamsList.get(1).Id;
-
+        
+        Test.startTest();
         Map<Id, Integer> resultingMap = SoccerDAO.getTeamsWithPlayerNumber(new Set<Id>{team1Id, team2Id});
+        Test.stopTest();
 
         System.assertEquals(
             2, 
@@ -154,8 +171,10 @@ private class SoccerDAOTest {
         Id team1Id = teamsList.get(0).Id;
         Id team2Id = teamsList.get(1).Id;
         Id team3Id = teamsList.get(2).Id;
-
+        
+        Test.startTest();
         Map<Id, Integer> resultingMap = SoccerDAO.getTeamsWithPlayerNumber(new Set<Id>{null});
+        Test.stopTest();
 
         System.assertEquals(
             2, 
@@ -186,7 +205,9 @@ private class SoccerDAOTest {
         Id team1Id = teamsList.get(0).Id;
         Id team2Id = teamsList.get(1).Id;
 
+        Test.startTest();
         Integer result = SoccerDAO.getTeamStatistics(new Set<Id>{team1Id, team2Id});
+        Test.stopTest();
 
         System.assertEquals(
             11, 
@@ -208,7 +229,9 @@ private class SoccerDAOTest {
         Id team2Id = teamsList.get(1).Id;
         Id team3Id = teamsList.get(2).Id;
 
+        Test.startTest();
         Integer result = SoccerDAO.getTeamStatistics(new Set<Id>{null});
+        Test.stopTest();
 
         System.assertEquals(
             11, 
@@ -228,7 +251,9 @@ private class SoccerDAOTest {
 
         Team__c team1 = teamsList[0];
 
+        Test.startTest();
         Team__c result = SoccerDAO.getTeamWithMostScores();
+        Test.stopTest();
 
         System.assertEquals(
             team1, 
