@@ -93,4 +93,4 @@ Team__c newFirstTeam = new Team__c(Name = 'FirstTeam');
 Team__c newSecondTeam = new Team__c(Name = 'SecondTeam');
 
 List<Team__c> testTeamsList = new List<Team__c>{newFirstTeam, newSecondTeam};
-System.debug(testTeamsList[0].Name); 
+//System.debug(testTeamsList[0].Name);
