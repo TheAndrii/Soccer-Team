@@ -1,4 +1,4 @@
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import getMatches from '@salesforce/apex/upcomingMatchesLWC.getMatches';
 
 const columns = [
@@ -23,8 +23,15 @@ const columns = [
 
 export default class UpcomingMatches extends LightningElement {
     @api recordId;
-    error;
     columns = columns;
+    matches = [];
 
-    @wire(getMatches, {currentRecordId:'$recordId'}) wiredgetMatches;
+    @wire(getMatches, {currentRecordId:'$recordId'}) 
+    wiredGetMatches({data, error}) {
+        if(data) {
+            this.matches = data;
+        } else if (error) {
+            console.log(error);
+        }
+    }
 }
