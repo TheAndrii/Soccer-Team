@@ -202,3 +202,87 @@ System.debug([
     SELECT Id, Name  
     FROM Team__c 
 ]);
+
+System.debug([
+    SELECT Id, Name, Score__c  
+    FROM Match__c
+    ORDER BY Score__c DESC
+    LIMIT 5
+]);
+
+String str1 = '5:3'; //8
+String str2 = '2:7'; //9
+if (str1 > str2) {
+	system.debug('Max');
+} else {
+   system.debug('Min');
+}
+
+List<Match__c> allMatchesList = [
+    SELECT Id, Name, Score__c  
+    FROM Match__c
+    WHERE Score__c != ''
+];
+
+System.debug(allMatchesList);
+Integer scr = 0;
+//List<Id> filteredMatchesList = new List<Id>();
+Map<String, Integer> matchesMap = new Map<String, Integer>();
+Set<Id> setId = new Set<Id>();
+
+for(Match__c match : allMatchesList){
+    Integer homeTeamScore = integer.valueof(match.Score__c.substringBefore(':'));
+    Integer visitorsTeamScore = integer.valueof(match.Score__c.substringAfter(':'));
+    Integer scrSum = homeTeamScore + visitorsTeamScore;
+    matchesMap.put(match.Id, scrSum);
+    setId.add(match.Id);
+}
+System.debug(matchesMap);
+
+
+public class Pair {
+        public Integer value { get; set; }
+        public String key { get; set; }
+        public Pair(Integer value, String key) {
+            this.value = value;
+            this.key = key;
+        }
+}
+
+List<Pair> oList = new List<Pair>();
+for (String matchId: setId) oList.add(new Pair(matchesMap.get(matchId), matchId));
+
+Integer tmpValue = 0;
+String tmpKey = NULL;
+
+// Bubble sort
+for (Integer i = 0; i < oList.size()-1; i++) {
+    for (Integer j = 1; j < oList.size(); j++) {
+        if (oList.get(j-1).value > oList.get(j).value) {
+            // permute
+            tmpValue = oList.get(j-1).value;
+            tmpKey = oList.get(j-1).key;
+            oList.get(j-1).value = oList.get(j).value;
+            oList.get(j-1).key = oList.get(j).key;
+            oList.get(j).value = tmpValue;
+            oList.get(j).key = tmpKey;
+          }
+     }
+}
+
+System.debug(oList);
+
+List<Pair> resultMatches = new List<Pair>();
+for(Integer i=oList.size()-1; i>=oList.size()-5;i--){
+    resultMatches.add(oList[i]);
+}
+System.debug(resultMatches);
+
+List<Id> result = new List<Id>();
+
+for (Integer i=0; i<5; i++){
+    result.add(resultMatches.get(i).key);
+}
+System.debug(result);
+
+System.debug(MatchRESTHelper.getMatchIds());
