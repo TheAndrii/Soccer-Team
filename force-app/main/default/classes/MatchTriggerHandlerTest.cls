@@ -12,9 +12,9 @@ private class MatchTriggerHandlerTest {
         Team__c newTeam2 = new Team__c(Name = 'Team2', TotalWins__c = 0, TotalActivePlayers__c = 11);
         insert new List<Team__c>{newTeam1, newTeam2};
 
-        DateTime dt1 = DateTime.valueOf('2022-10-27 17:00:00');
-        DateTime dt2 = DateTime.valueOf('2022-10-28 17:00:00');
-        DateTime dt3 = DateTime.valueOf('2022-10-29 17:00:00');
+        DateTime dt1 = DateTime.valueOf('2022-11-17 17:00:00');
+        DateTime dt2 = DateTime.valueOf('2022-11-18 17:00:00');
+        DateTime dt3 = DateTime.valueOf('2022-11-19 17:00:00');
 
         Match__c mewMatch1 = new Match__c(
             Name = 'Team1 - Team2', StartDateTime__c = dt1, HomeTeam__c = newTeam1.Id, Visitors__c = newTeam2.Id, Score__c = '1:0'
@@ -78,7 +78,7 @@ private class MatchTriggerHandlerTest {
 
         DateTime prevDT5 = previousMatches[0].StartDateTime__c;
 
-        DateTime dt5 = DateTime.valueOf('2022-11-09 13:00:00');
+        DateTime dt5 = DateTime.valueOf('2022-11-22 13:00:00');
 
         Match__c mewMatch5 = new Match__c(
             Name = 'Team2 - Team1', StartDateTime__c = dt5, HomeTeam__c = team2Id, Visitors__c = team1Id

@@ -17,7 +17,7 @@ private class SoccerDAOTest {
         Player__c newPlayer6 = new Player__c(Name = 'Player6', isActive__c = true, Team__c = newTeam3.Id);
         insert new List<Player__c>{newPlayer1, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6};
 
-        DateTime dt = DateTime.valueOf('2022-10-30 17:00:00');
+        DateTime dt = DateTime.valueOf('2022-11-30 17:00:00');
 
         Match__c mewMatch1 = new Match__c(
             Name = 'Team1 - Team2', StartDateTime__c = dt, HomeTeam__c = newTeam1.Id, Visitors__c = newTeam2.Id, Score__c = '1:0'

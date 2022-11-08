@@ -91,9 +91,9 @@ Set<Id> teamIdsSet = new Set<Id>();
 List<Match__c> matchesInPrevMonth = [
             SELECT Id, Name, StartDatetime__c, Visitors__c, HomeTeam__c, Winner__c  
             FROM Match__c 
-            WHERE Winner__c != 'Draw' 
+            WHERE Winner__c != 'Draw' AND StartDatetime__c = LAST_N_MONTHS:1
         ];
-//System.debug(matchesInPrevMonth); //WHERE StartDatetime__c = LAST_N_MONTHS:1
+System.debug(matchesInPrevMonth); //WHERE StartDatetime__c = LAST_N_MONTHS:1
 
         Set<Id> teamIds = new Set<Id>();
 
@@ -285,4 +285,9 @@ for (Integer i=0; i<5; i++){
 }
 System.debug(result);
 
-System.debug(MatchRESTHelper.getMatchIds());
+//System.debug(MatchRESTHelper.getMatchIds());
+System.debug([
+    SELECT Id, Name  
+    FROM Team__c 
+]);
+SoccerDAO.getTeamWithMostScores();

@@ -12,7 +12,7 @@ private class SoccerServicesTest {
         Team__c newTeam2 = new Team__c(Name = 'Team2', TotalWins__c = 1, TotalActivePlayers__c = 11);
         insert new List<Team__c>{newTeam1, newTeam2};
 
-        DateTime dt = DateTime.valueOf('2022-10-30 17:00:00');
+        DateTime dt = DateTime.valueOf('2022-11-30 17:00:00');
 
         Match__c mewMatch1 = new Match__c(
             Name = 'Team1 - Team2', StartDateTime__c = dt, HomeTeam__c = newTeam1.Id, Visitors__c = newTeam2.Id
@@ -58,7 +58,7 @@ private class SoccerServicesTest {
 
         Id homeTeamId = teamsList.get(0).Id;
         Id visitorsTeamId = teamsList.get(1).Id;
-        DateTime mathcDT = DateTime.valueOf('2022-11-30 17:00:00');
+        DateTime mathcDT = DateTime.valueOf('2022-12-30 17:00:00');
 
         Test.startTest();
         SoccerService.arangeMatch(mathcDT, homeTeamId, visitorsTeamId);
